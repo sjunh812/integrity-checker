@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">IntegrityChecker</string>
+    <string name="label_meets_device_integrity">MEETS_DEVICE_INTEGRITY</string>
+    <string name="label_meets_basic_integrity">MEETS_BASIC_INTEGRITY</string>
+    <string name="label_meets_strong_integrity">MEETS_STRONG_INTEGRITY</string>
+    <string name="label_check_play_integrity_api">check(Play Integrity API)</string>
+    <string name="check_isolated_process">check(Isolated Process)</string>
+</resources>

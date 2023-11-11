@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <ImageView
+            android:id="@+id/iv_device_integrity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_unknown"
+            app:layout_constraintBottom_toTopOf="@id/iv_basic_integrity"
+            app:layout_constraintEnd_toStartOf="@id/tv_device_integrity"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <ImageView
+            android:id="@+id/iv_basic_integrity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_unknown"
+            app:layout_constraintBottom_toTopOf="@id/iv_strong_integrity"
+            app:layout_constraintStart_toStartOf="@id/iv_device_integrity"
+            app:layout_constraintTop_toBottomOf="@id/iv_device_integrity" />
+
+        <ImageView
+            android:id="@+id/iv_strong_integrity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_unknown"
+            app:layout_constraintBottom_toTopOf="@id/btn_check"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@id/iv_basic_integrity"
+            app:layout_constraintTop_toBottomOf="@id/iv_basic_integrity" />
+
+        <TextView
+            android:id="@+id/tv_device_integrity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/label_meets_device_integrity"
+            android:textColor="?colorOnSecondary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_device_integrity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_device_integrity"
+            app:layout_constraintTop_toTopOf="@id/iv_device_integrity" />
+
+        <TextView
+            android:id="@+id/tv_basic_integrity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/label_meets_basic_integrity"
+            android:textColor="?colorOnSecondary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_basic_integrity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/iv_basic_integrity"
+            app:layout_constraintTop_toTopOf="@id/iv_basic_integrity" />
+
+        <TextView
+            android:id="@+id/tv_strong_integrity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:text="@string/label_meets_strong_integrity"
+            android:textColor="?colorOnSecondary"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_strong_integrity"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/iv_strong_integrity"
+            app:layout_constraintTop_toTopOf="@id/iv_strong_integrity" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_check"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/label_check_play_integrity_api"
+            android:textColor="?colorOnSecondary"
+            app:cornerRadius="8dp"
+            app:iconTint="?colorSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_strong_integrity"
+            app:rippleColor="?colorSecondary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_check2"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/check_isolated_process"
+            android:textColor="?colorOnSecondary"
+            app:cornerRadius="8dp"
+            app:iconTint="?colorSecondary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_check"
+            app:rippleColor="?colorSecondary" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
