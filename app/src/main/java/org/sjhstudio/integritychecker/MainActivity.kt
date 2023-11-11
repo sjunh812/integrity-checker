@@ -51,6 +51,11 @@ class MainActivity : AppCompatActivity() {
         bindRootingCheckerService()
     }
 
+    override fun onStop() {
+        super.onStop()
+        unbindRootingCheckerService()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)

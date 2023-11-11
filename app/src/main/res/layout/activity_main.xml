@@ -88,7 +88,7 @@
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:text="@string/label_check_play_integrity_api"
             android:textColor="?colorOnSecondary"
             app:cornerRadius="8dp"
