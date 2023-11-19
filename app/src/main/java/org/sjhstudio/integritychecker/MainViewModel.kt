@@ -22,17 +22,23 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.jose4j.jwe.JsonWebEncryption
 import org.jose4j.jws.JsonWebSignature
 import org.jose4j.jwx.JsonWebStructure
 import org.jose4j.lang.JoseException
 import org.json.JSONObject
-import org.sjhstudio.integritychecker.integrity.IntegrityState
-import org.sjhstudio.integritychecker.integrity.IntegrityUtil
+import org.sjhstudio.integritychecker.domain.usecase.CheckIntegrityUseCase
+import org.sjhstudio.integritychecker.integrity.model.IntegrityState
+import org.sjhstudio.integritychecker.integrity.util.IntegrityUtil
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel @Inject constructor(
+    private val checkIntegrityUseCase: CheckIntegrityUseCase
+) : ViewModel() {
 
     private var _deviceIntegrityState = MutableStateFlow<IntegrityState>(IntegrityState.UnKnown)
     val deviceIntegrityState = _deviceIntegrityState.asStateFlow()
@@ -54,7 +60,36 @@ class MainViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun getToken(context: Context) {
+    fun checkIntegrity() {
+        val request = "test"
+        viewModelScope.launch {
+            checkIntegrityUseCase(request)
+                .onEach { map ->
+                    if (map["MEETS_DEVICE_INTEGRITY"] == true) {
+                        _deviceIntegrityState.emit(IntegrityState.Pass)
+                    } else {
+                        _deviceIntegrityState.emit(IntegrityState.Fail)
+                    }
+
+                    if (map["MEETS_BASIC_INTEGRITY"] == true) {
+                        _basicIntegrityState.emit(IntegrityState.Pass)
+                    } else {
+                        _basicIntegrityState.emit(IntegrityState.Fail)
+                    }
+
+                    if (map["MEETS_STRONG_INTEGRITY"] == true) {
+                        _strongIntegrityState.emit(IntegrityState.Pass)
+                    } else {
+                        _strongIntegrityState.emit(IntegrityState.Fail)
+                    }
+                }.catch { cause ->
+                    Log.e("sjh", "checkIntegrity :: ERROR($cause)")
+                    _error.emit(IntegrityUtil.getErrorMessage(cause))
+                }.collect()
+        }
+    }
+
+    fun requestOriginIntegrityToken(context: Context) {
         val nonce: String = IntegrityUtil.generateNonce(50)
 
         // Create an instance of a manager.
@@ -68,20 +103,20 @@ class MainViewModel @Inject constructor() : ViewModel() {
         )
         integrityTokenResponse.addOnSuccessListener { integrityTokenResponse1: IntegrityTokenResponse ->
             viewModelScope.launch {
-                Log.d("sjh", "getToken :: success")
+                Log.d("sjh", "requestOriginIntegrityToken :: SUCCESS")
                 val integrityToken = integrityTokenResponse1.token()
-                decryption(integrityToken)
+                decryptOriginToken(integrityToken)
             }
         }
         integrityTokenResponse.addOnFailureListener { e ->
             viewModelScope.launch {
-                Log.e("sjh", "getToken :: fail")
-                _error.emit(IntegrityUtil.getErrorText(e))
+                Log.e("sjh", "requestOriginIntegrityToken :: FAIL")
+                _error.emit(IntegrityUtil.getErrorMessage(e))
             }
         }
     }
 
-    private fun decryption(integrityToken: String) {
+    private fun decryptOriginToken(integrityToken: String) {
         viewModelScope.launch {
             // base64OfEncodedDecryptionKey is provided through Play Console.
             val decryptionKeyBytes: ByteArray = Base64.decode(DECRYPTION_KEY, Base64.DEFAULT)
@@ -173,11 +208,11 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
             Log.d("sjh", "decryption :: result >> $jsonPlainVerdict")
 
-            checkIntegrity(jsonPlainVerdict)
+            checkOriginIntegrity(jsonPlainVerdict)
         }
     }
 
-    private fun checkIntegrity(payload: String) {
+    private fun checkOriginIntegrity(payload: String) {
         viewModelScope.launch {
             payload.takeIf { it.isNotEmpty() }?.let {
                 val json = JSONObject(it)

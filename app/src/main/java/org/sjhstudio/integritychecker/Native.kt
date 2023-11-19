@@ -1,6 +1,6 @@
 package org.sjhstudio.integritychecker
 
-internal object Native {
+object Native {
 
     init {
         System.loadLibrary("native-lib")

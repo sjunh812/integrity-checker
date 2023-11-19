@@ -23,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.sjhstudio.integritychecker.databinding.ActivityMainBinding
-import org.sjhstudio.integritychecker.integrity.IntegrityState
+import org.sjhstudio.integritychecker.integrity.model.IntegrityState
 import org.sjhstudio.integritychecker.service.RootingCheckerService
 
 @AndroidEntryPoint
@@ -48,13 +48,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        bindRootingCheckerService()
+//        bindRootingCheckerService()
     }
 
-    override fun onStop() {
-        super.onStop()
-        unbindRootingCheckerService()
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        unbindRootingCheckerService()
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +69,9 @@ class MainActivity : AppCompatActivity() {
             btnCheck.setOnClickListener {
                 setProgress(true)
                 viewModel.initIntegrityState()
-                viewModel.getToken(this@MainActivity)
+                viewModel.checkIntegrity()
+//                viewModel.requestProviderAndIntegrityToken()
+//                viewModel.requestIntegrityToken()
             }
             btnCheck2.setOnClickListener {
                 var isMagisk: Boolean

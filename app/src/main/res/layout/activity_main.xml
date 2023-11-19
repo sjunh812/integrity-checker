@@ -107,6 +107,7 @@
             android:layout_marginTop="20dp"
             android:text="@string/check_isolated_process"
             android:textColor="?colorOnSecondary"
+            android:visibility="gone"
             app:cornerRadius="8dp"
             app:iconTint="?colorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
